@@ -66,7 +66,7 @@ def add_page_numbers_to_pdf(input_bytes: bytes) -> bytes:
         packet = io.BytesIO()
         can = canvas.Canvas(packet, pagesize=(width, height))
         can.setFont("Helvetica-Bold", 20)
-        can.drawString(110, height - 100, str(i))
+        can.drawString(100, height - 100, str(i))
         can.save()
         packet.seek(0)
         overlay_pdf = PdfReader(packet)
