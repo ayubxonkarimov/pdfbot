@@ -3,6 +3,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 from reportlab.pdfgen import canvas
 from pypdf import PdfReader, PdfWriter
 from datetime import datetime, timedelta
+from pytz import timezone
 import fitz  # PyMuPDF
 import io
 import os
@@ -50,7 +51,8 @@ def save_subscription(user_id, end_date, filename="subscriptions.txt"):
 def is_subscription_valid(user_id):
     subs = load_subscriptions()
     end_date = subs.get(user_id)
-    return end_date and end_date >= datetime.now()
+    now = datetime.now(timezone('Asia/Tashkent'))
+    return end_date and end_date >= now
 
 # === Global ===
 ADMINS = load_admins()
@@ -83,7 +85,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if (user_id in ADMINS or is_subscription_valid(user_id)):
         await update.message.reply_text("PDF faylni yuboring – sahifalarga raqam qo‘shib qaytaraman.")
     else:
-        await update.message.reply_text("⛔ Sizda ruxsat yo‘q yoki obuna muddati tugagan.")
+        await update.message.reply_text("⛔️ Sizda ruxsat yo‘q yoki obuna muddati tugagan.")
 
 async def handle_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
@@ -153,7 +155,7 @@ async def subscribe_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # === 1 kun qolganda ogohlantirish ===
 async def notify_expiring_subscriptions(app):
     subs = load_subscriptions()
-    today = datetime.now().date()
+    today = datetime.now(timezone('Asia/Tashkent')).date()
     for user_id, end_date in subs.items():
         if (end_date.date() - today).days == 1:
             try:
