@@ -160,7 +160,7 @@ def main():
     global ADMINS
     ADMINS = load_admins()
 
-    app = ApplicationBuilder().token("YOUR_BOT_TOKEN").build()
+    app = ApplicationBuilder().token("7839498388:AAF6b5dI1mJYxP43P0niDYRYkfLUgBslD6E").build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("addadmin", add_admin))
